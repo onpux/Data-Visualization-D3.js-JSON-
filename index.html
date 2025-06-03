@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualizaciones Globales en HTML</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 48px auto;
+      background: rgba(255,255,255,0.95);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px #0002;
+      padding: 40px 32px 32px 32px;
+      border: 1px solid #e3e3e3;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 36px;
+      color: #2d5c8a;
+      letter-spacing: 1px;
+      font-weight: 700;
+      font-size: 2.3em;
+      text-shadow: 0 2px 8px #b3d8f7;
+    }
+    .visual {
+      margin-bottom: 48px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px #0001;
+      padding: 24px 18px 18px 18px;
+      border: 1px solid #e3e3e3;
+    }
+    .visual h2 {
+      text-align: center;
+      color: #b85c38;
+      margin-bottom: 18px;
+      font-size: 1.3em;
+    }
+    #heatmap {
+      display: grid;
+      grid-template-columns: repeat(24, 18px);
+      grid-gap: 2px;
+      justify-content: center;
+      margin: 0 auto 16px auto;
+    }
+    .heat-cell {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      background: #eee;
+      transition: background 0.2s;
+      border: 1px solid #e3e3e3;
+    }
+    .heat-labels {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.9em;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    @media (max-width: 900px) {
+      .container { padding: 12px; }
+      .visual { padding: 10px 4px 8px 4px; }
+    }
+  </style>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Charts -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Visualizaciones Globales en HTML</h1>
+    <div class="visual">
+      <h2>Gráfico de líneas: Evolución de la temperatura global</h2>
+      <canvas id="tempChart" width="600" height="300"></canvas>
+    </div>
+    <div class="visual">
+      <h2>Mapa de calor de uso horario (simulado)</h2>
+      <div class="heat-labels">
+        <span>0h</span><span>6h</span><span>12h</span><span>18h</span><span>24h</span>
+      </div>
+      <div id="heatmap"></div>
+    </div>
+    <div class="visual">
+      <h2>Mapa mundial: Población mundial por país</h2>
+      <div id="geoChart" style="width: 100%; min-height: 420px;"></div>
+    </div>
+  </div>
+  <script>
+    // Gráfico de líneas de temperatura global (datos simulados)
+    const tempCtx = document.getElementById('tempChart').getContext('2d');
+    new Chart(tempCtx, {
+      type: 'line',
+      data: {
+        labels: ["1880", "1900", "1920", "1940", "1960", "1980", "2000", "2020"],
+        datasets: [{
+          label: 'Temperatura global (°C, anomalía)',
+          data: [-0.2, -0.1, 0.0, 0.05, 0.1, 0.2, 0.5, 1.0],
+          borderColor: '#fda085',
+          backgroundColor: 'rgba(253,160,133,0.15)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4,
+          pointBackgroundColor: '#b85c38',
+        }]
+      },
+      options: {
+        responsive: false,
+        plugins: {
+          legend: { display: false },
+          title: { display: false }
+        },
+        scales: {
+          x: { title: { display: true, text: 'Año' } },
+          y: { title: { display: true, text: 'Anomalía (°C)' } }
+        }
+      }
+    });
+
+    // Mapa de calor de uso horario (simulado)
+    // 7 días x 24 horas
+    const heatmap = document.getElementById('heatmap');
+    const days = 7;
+    const hours = 24;
+    // Generar datos aleatorios para simular actividad
+    const getColor = v => {
+      // v entre 0 y 1
+      if (v > 0.8) return '#f85c50';
+      if (v > 0.6) return '#fda085';
+      if (v > 0.4) return '#f6d365';
+      if (v > 0.2) return '#a1c4fd';
+      return '#e3e3e3';
+    };
+    for (let d = 0; d < days; d++) {
+      for (let h = 0; h < hours; h++) {
+        const v = Math.random();
+        const cell = document.createElement('div');
+        cell.className = 'heat-cell';
+        cell.title = `Día ${d+1}, ${h}:00\nNivel: ${(v*100).toFixed(0)}%`;
+        cell.style.background = getColor(v);
+        heatmap.appendChild(cell);
+      }
+    }
+
+    // Mapa mundial de población (Google GeoChart)
+    google.charts.load('current', {
+      'packages':['geochart'],
+    });
+    google.charts.setOnLoadCallback(drawRegionsMap);
+    function drawRegionsMap() {
+      var data = google.visualization.arrayToDataTable([
+        ['Country', 'Población (millones)'],
+        ['China', 1440],
+        ['India', 1390],
+        ['United States', 332],
+        ['Indonesia', 276],
+        ['Pakistan', 225],
+        ['Brazil', 213],
+        ['Nigeria', 211],
+        ['Bangladesh', 166],
+        ['Russia', 146],
+        ['Mexico', 128],
+        ['Japan', 125],
+        ['Ethiopia', 120],
+        ['Filipinas', 113],
+        ['Egipto', 104],
+        ['Vietnam', 98],
+        ['Alemania', 83],
+        ['Turquía', 82],
+        ['Francia', 67],
+        ['Reino Unido', 67],
+        ['Italia', 60],
+        // ...puedes agregar más países
+      ]);
+      var options = {
+        colorAxis: {colors: ['#a1c4fd', '#f6d365', '#fda085', '#f85c50']},
+        backgroundColor: '#f4f4f4',
+        datalessRegionColor: '#e3e3e3',
+        defaultColor: '#fda085',
+        legend: {textStyle: {color: '#2d5c8a', fontSize: 13}},
+      };
+      var chart = new google.visualization.GeoChart(document.getElementById('geoChart'));
+      chart.draw(data, options);
+    }
+  </script>
+</body>
+</html>
