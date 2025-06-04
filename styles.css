@@ -72,8 +72,8 @@ h1 {
 }
 @media (min-width: 900px) {
   #worldMap {
-    width: 900px !important;
-    height: 450px !important;
+    width: 1350px !important;
+    height: 675px !important;
   }
 }
 @media (max-width: 900px) {
@@ -81,3 +81,4 @@ h1 {
   .visual { padding: 10px 4px 8px 4px; }
   #worldMap, #tempChart { width: 100% !important; height: auto !important; }
 }
+
