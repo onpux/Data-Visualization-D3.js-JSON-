@@ -92,7 +92,22 @@ Promise.all([
     "CHN": 1440, "IND": 1390, "USA": 332, "IDN": 276, "PAK": 225, "BRA": 213, "NGA": 211, "RUS": 146, "MEX": 128, "JPN": 125
   })
 ]).then(([world, popData]) => {
+  // Necesitamos topojson para convertir el archivo world-atlas
+  if (typeof topojson === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js';
+    script.onload = () => drawMap(world, popData);
+    document.body.appendChild(script);
+  } else {
+    drawMap(world, popData);
+  }
+});
+
+function drawMap(world, popData) {
   const countries = topojson.feature(world, world.objects.countries).features;
+  const worldSvg = d3.select("#worldMap"),
+    width2 = +worldSvg.attr("width"),
+    height2 = +worldSvg.attr("height");
   const projection = d3.geoMercator().fitSize([width2, height2], {type: "FeatureCollection", features: countries});
   const path = d3.geoPath().projection(projection);
   const popExtent = d3.extent(Object.values(popData));
@@ -104,7 +119,6 @@ Promise.all([
     .attr("d", path)
     .attr("fill", d => {
       const id = d.id;
-      // ISO_A3 code mapping (simplified)
       const pop = popData[id];
       return pop ? color(pop) : "#eee";
     })
@@ -112,4 +126,4 @@ Promise.all([
     .attr("stroke-width", 0.5)
     .append("title")
     .text(d => `${d.properties.name || d.id}: ${popData[d.id] ? popData[d.id] + 'M' : 'No data'}`);
-});
+}
