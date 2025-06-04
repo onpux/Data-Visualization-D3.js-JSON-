@@ -66,14 +66,14 @@ h1 {
 #worldMap {
   display: block;
   margin: 0 auto 24px auto;
-  /* Centrado horizontal */
   max-width: 100%;
   height: auto;
 }
 @media (min-width: 900px) {
   #worldMap {
-    width: 1350px !important;
+    width: 1870px !important; /* 70% más ancho que 1100px (container) */
     height: 675px !important;
+    max-width: 1870px;
   }
 }
 @media (max-width: 900px) {
@@ -81,4 +81,3 @@ h1 {
   .visual { padding: 10px 4px 8px 4px; }
   #worldMap, #tempChart { width: 100% !important; height: auto !important; }
 }
-
