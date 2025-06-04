@@ -104,6 +104,12 @@ Promise.all([
 });
 
 function drawMap(world, popData) {
+  // Mapeo de id numérico a código ISO_A3
+  // Lista mínima para demo, puedes ampliarla con más países
+  const idToIsoA3 = {
+    156: 'CHN', 356: 'IND', 840: 'USA', 360: 'IDN', 586: 'PAK',
+    76: 'BRA', 566: 'NGA', 643: 'RUS', 484: 'MEX', 392: 'JPN'
+  };
   const countries = topojson.feature(world, world.objects.countries).features;
   const worldSvg = d3.select("#worldMap"),
     width2 = +worldSvg.attr("width"),
@@ -118,12 +124,15 @@ function drawMap(world, popData) {
     .enter().append("path")
     .attr("d", path)
     .attr("fill", d => {
-      const id = d.id;
-      const pop = popData[id];
+      const iso = idToIsoA3[d.id];
+      const pop = popData[iso];
       return pop ? color(pop) : "#eee";
     })
     .attr("stroke", "#fff")
     .attr("stroke-width", 0.5)
     .append("title")
-    .text(d => `${d.properties.name || d.id}: ${popData[d.id] ? popData[d.id] + 'M' : 'No data'}`);
+    .text(d => {
+      const iso = idToIsoA3[d.id];
+      return `${d.properties.name || d.id}: ${popData[iso] ? popData[iso] + 'M' : 'No data'}`;
+    });
 }
