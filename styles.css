@@ -63,6 +63,19 @@ h1 {
   color: #888;
   margin-bottom: 8px;
 }
+#worldMap {
+  display: block;
+  margin: 0 auto 24px auto;
+  /* Centrado horizontal */
+  max-width: 100%;
+  height: auto;
+}
+@media (min-width: 900px) {
+  #worldMap {
+    width: 900px !important;
+    height: 450px !important;
+  }
+}
 @media (max-width: 900px) {
   .container { padding: 12px; }
   .visual { padding: 10px 4px 8px 4px; }
