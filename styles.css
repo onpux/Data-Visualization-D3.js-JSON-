@@ -66,14 +66,15 @@ h1 {
 #worldMap {
   display: block;
   margin: 0 auto 24px auto;
-  max-width: 100%;
-  height: auto;
+  max-width: 1100px;
+  width: 100% !important;
+  height: auto !important;
 }
 @media (min-width: 900px) {
   #worldMap {
-    width: 1870px !important; /* 70% más ancho que 1100px (container) */
-    height: 675px !important;
-    max-width: 1870px;
+    width: 1100px !important;
+    height: 550px !important;
+    max-width: 1100px;
   }
 }
 @media (max-width: 900px) {
