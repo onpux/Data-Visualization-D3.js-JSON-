@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Visualization Projects - D3.js & CSV</title>
+  <link rel="stylesheet" href="dataviz_purple.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <header class="main-header">
+    <h1>Data Visualization Projects</h1>
+    <p class="subtitle">D3.js, CSV, SVG, and Interactive Data Graphics</p>
+  </header>
+  <main class="container">
+    <section class="project" id="project1">
+      <h2>Project 1: US Minimum Wage Evolution (Line Chart)</h2>
+      <p>Interactive line chart showing the evolution of the US minimum wage over time using D3.js.</p>
+      <div id="wage-chart-container">
+        <svg id="wage-chart" width="700" height="350"></svg>
+      </div>
+    </section>
+    <section class="project" id="project2">
+      <h2>Project 2: User Activity Heatmap</h2>
+      <p>Daily/hourly user activity heatmap (GitHub style) with D3.js and JSON data.</p>
+      <div id="heatmap-container"></div>
+    </section>
+    <section class="project" id="project3">
+      <h2>Project 3: Stacked Bar Chart of Food Consumption</h2>
+      <p>Comparison of carbohydrates, fats, and proteins consumption by country (FAO/Google Sheets data).</p>
+      <div id="food-bar-container">
+        <svg id="food-bar-chart" width="700" height="400"></svg>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Data Visualization Projects. Purple artistic presentation with golden moons.</p>
+  </footer>
+  <script src="dataviz_purple.js"></script>
+</body>
+</html>
