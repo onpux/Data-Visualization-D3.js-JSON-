@@ -1,92 +1,68 @@
-// Artistic background: falling golden moons, purple mountains, moving white moon
+// Artistic background: falling colorful spheres
 (function() {
   const canvas = document.getElementById('bg-canvas');
   const ctx = canvas.getContext('2d');
-  let W = window.innerWidth, H = window.innerHeight;
-  function resize() {
-    W = window.innerWidth;
-    H = window.innerHeight;
-    canvas.width = W;
-    canvas.height = H;
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  function resizeCanvas() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
   }
-  window.addEventListener('resize', resize);
-  resize();
-  // Falling golden crescent moons (medialunas)
-  const moons = Array.from({length: 18}, () => ({
-    x: -40 - Math.random()*60,
-    y: -40 - Math.random()*H*0.5,
-    r: 18 + Math.random()*22,
-    dx: 0.7 + Math.random()*0.7,
-    dy: 0.5 + Math.random()*0.7,
-    phase: Math.random()*Math.PI*2
-  }));
-  // White moon
-  let moonAngle = 0;
-  function drawCrescentMoon(cx, cy, r) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, Math.PI*0.15, Math.PI*1.85, false);
-    ctx.arc(cx+r*0.45, cy-r*0.1, r*0.8, Math.PI*1.1, Math.PI*1.9, true);
-    ctx.closePath();
-    ctx.fillStyle = '#ffd700';
-    ctx.globalAlpha = 0.85;
-    ctx.shadowColor = '#ffd700';
-    ctx.shadowBlur = 18;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.globalAlpha = 1;
-    ctx.restore();
+  window.addEventListener('resize', resizeCanvas);
+
+  // Spheres array
+  const spheres = [];
+  const sphereColors = ['#ffe6ff', '#fff176', '#b39ddb', '#ce93d8', '#fffde7'];
+  function spawnSphere() {
+    const r = 8 + Math.random() * 10;
+    spheres.push({
+      x: 30 + Math.random() * 80,
+      y: -r,
+      r,
+      vy: 1.1 + Math.random() * 1.7,
+      color: sphereColors[Math.floor(Math.random() * sphereColors.length)],
+      alpha: 0.7 + Math.random() * 0.3
+    });
   }
-  function drawMountains() {
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(0,H*0.7);
-    ctx.lineTo(W*0.18,H*0.55);
-    ctx.lineTo(W*0.32,H*0.75);
-    ctx.lineTo(W*0.5,H*0.6);
-    ctx.lineTo(W*0.7,H*0.8);
-    ctx.lineTo(W,H*0.65);
-    ctx.lineTo(W,H);
-    ctx.lineTo(0,H);
-    ctx.closePath();
-    ctx.fillStyle = '#4527a0';
-    ctx.globalAlpha = 0.7;
-    ctx.fill();
-    ctx.globalAlpha = 1;
-    ctx.restore();
-  }
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    drawMountains();
-    // Falling golden crescent moons
-    for(const m of moons) {
-      drawCrescentMoon(m.x, m.y, m.r);
-      m.x += m.dx;
-      m.y += m.dy;
-      if(m.x-m.r>W || m.y-m.r>H) {
-        m.x = -40 - Math.random()*60;
-        m.y = -40 - Math.random()*H*0.5;
-        m.r = 18 + Math.random()*22;
-      }
+
+  function drawSpheres() {
+    ctx.clearRect(0, 0, width, height);
+    for (let s of spheres) {
+      ctx.save();
+      ctx.globalAlpha = s.alpha;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, 2 * Math.PI);
+      ctx.fillStyle = s.color;
+      ctx.shadowColor = s.color;
+      ctx.shadowBlur = 12;
+      ctx.fill();
+      ctx.restore();
     }
-    // Moving white moon
-    const moonX = W*0.8 + Math.sin(moonAngle)*W*0.08;
-    const moonY = H*0.18 + Math.cos(moonAngle)*H*0.03;
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(moonX, moonY, 54, 0, 2*Math.PI);
-    ctx.fillStyle = '#fff';
-    ctx.shadowColor = '#fff';
-    ctx.shadowBlur = 60;
-    ctx.globalAlpha = 0.95;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-    ctx.globalAlpha = 1;
-    ctx.restore();
-    moonAngle += 0.0015;
-    requestAnimationFrame(draw);
   }
-  draw();
+
+  function updateSpheres() {
+    for (let s of spheres) {
+      s.y += s.vy;
+      s.x += 0.2 + Math.random() * 0.3; // drift right
+    }
+    // Remove spheres out of view
+    while (spheres.length > 0 && spheres[0].y - spheres[0].r > height) {
+      spheres.shift();
+    }
+  }
+
+  function animate() {
+    if (Math.random() < 0.13 && spheres.length < 32) spawnSphere();
+    updateSpheres();
+    drawSpheres();
+    requestAnimationFrame(animate);
+  }
+  animate();
 })();
 
 // --- Project 1: US Minimum Wage Evolution (Line Chart) ---
