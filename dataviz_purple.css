@@ -31,21 +31,24 @@ body {
 }
 .subtitle {
   font-size: 1.2rem;
-  color: #ffd600;
+  color: #ffe6ff;
   margin-bottom: 0;
   letter-spacing: 1px;
   animation: fadeIn 1.5s 0.3s both;
 }
 .project {
-  background: rgba(255,255,255,0.85); /* more transparent white */
+  background: rgba(180,180,190,0.22); /* gris translúcido */
   border-radius: 18px;
   box-shadow: 0 4px 24px #ffd60022;
   margin: 32px auto 24px auto;
   max-width: 900px;
   padding: 32px 24px 18px 24px;
-  color: #333;
+  color: #f7f7f7;
   position: relative;
   z-index: 5;
+}
+.project h2 {
+  color: #ffe6ff;
 }
 footer {
   text-align: center;
